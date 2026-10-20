@@ -1,6 +1,7 @@
 #include <string>
 #include <cstdint>
 #include <cstring>
+#include <iostream>
 
 using namespace std;
 
@@ -97,6 +98,79 @@ bool check_data(string data){
     return true;
 }
 
-int main(){    
+int main()
+{
+    init_bitArray();
+
+    string inserted[] = {
+        "apple",
+        "banana",
+        "orange",
+        "computer",
+        "MIPS"};
+
+    int insertedCount = sizeof(inserted) / sizeof(inserted[0]);
+
+    // Add all test words to the filter
+    for (int i = 0; i < insertedCount; i++)
+    {
+        record_to_filter(inserted[i]);
+    }
+
+    // Test whether inserted words are found
+    int falseNegatives = 0;
+
+    for (int i = 0; i < insertedCount; i++)
+    {
+        if (!check_data(inserted[i]))
+        {
+            falseNegatives++;
+            cout << "ERROR: " << inserted[i]
+                 << " was not found!" << endl;
+        }
+    }
+
+    string notInserted[] = {
+        "grape",
+        "laptop",
+        "galaxy",
+        "strawberry",
+        "pizza",
+        "keyboard",
+        "database",
+        "microcontroller"};
+
+    int notInsertedCount =
+        sizeof(notInserted) / sizeof(notInserted[0]);
+
+    // Count false positives
+    int falsePositives = 0;
+
+    for (int i = 0; i < notInsertedCount; i++)
+    {
+        if (check_data(notInserted[i]))
+        {
+            falsePositives++;
+            cout << "False positive: "
+                 << notInserted[i] << endl;
+        }
+    }
+
+    cout << "\nFalse negatives: "
+         << falseNegatives << endl;
+
+    cout << "False positives: "
+         << falsePositives << " / "
+         << notInsertedCount << endl;
+
+    if (falseNegatives == 0)
+    {
+        cout << "Inserted-item test: PASS" << endl;
+    }
+    else
+    {
+        cout << "Inserted-item test: FAIL" << endl;
+    }
+
     return 0;
 }
